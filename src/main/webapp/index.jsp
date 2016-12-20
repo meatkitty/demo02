@@ -11,9 +11,7 @@
   </td>
   <td>
      <h1>Hello World...We're continuously delivering</h1>
- <h3>Version Update Tue Dec 20 15:19:00 GMT 2016</h3>
- <h3>Version Update Tue Dec 20 15:04:59 GMT 2016</h3>
- <h3>Version Update Tue Dec 20 12:55:09 GMT 2016</h3>
+ <h3>Version Update Tue Dec 20 15:33:25 GMT 2016</h3>
   </td>
 </tr>
 </table>
