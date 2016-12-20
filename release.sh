@@ -8,9 +8,10 @@
 DTE=$(date)
 SCM="https://github.com"
 USR="sbadakhc"
+GRP="devops"
 APP="helloworld"
 REP="${SCM}/${USR}/${APP}"
-REG="gitlab.bluebank.io:4678/${USR}/${APP}"
+REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
 SUB_DOMAIN="devops.bluebank.io"
 
 read -d '' USAGE <<- EOF
