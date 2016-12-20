@@ -10,7 +10,7 @@ SCM="https://github.com"
 USR="sbadakhc"
 APP="helloworld"
 REP="${SCM}/${USR}/${APP}"
-REG="gitlab.bluebank.io:4678/${USR:7}/${APP}"
+REG="gitlab.bluebank.io:4678/${USR}/${APP}"
 SUB_DOMAIN="devops.bluebank.io"
 
 read -d '' USAGE <<- EOF
