@@ -89,8 +89,8 @@ case $OPTS in
                     docker login gitlab.bluebank.io:4678
                     docker build -t gitlab.bluebank.io:4678/devcops/${APP} .
                     docker push gitlab.bluebank.io:4678/devcops/${APP}
-                    oc delete project ${APP} && sleep 5
-                    oc new-project ${APP} 
+                    #oc delete project ${APP} && sleep 5
+                    #oc new-project ${APP} 
                     oc new-app --insecure-registry=true --docker-image="gitlab.bluebank.io:4678/devcops/helloworld":latest --name=${APP}
                     echo -e "\n>> Creating Service and Route" &&  oc expose service/helloworld --hostname=${APP}.${SUB} --path=/${APP}
                     exit ;;
