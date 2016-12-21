@@ -5,14 +5,16 @@
 # Uncomment to enable debugging
 #set -x 
 
+# Modify environemtn varibles accordingly
 DTE=$(date)
 SCM="https://github.com"
-USR="sbadakhc"
-GRP="devops"
+GRP="devcops"
 APP="helloworld"
-REP="${SCM}/${USR}/${APP}"
+REP="${SCM}/${GRP}/${APP}"
 REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
-SUB_DOMAIN="devops.bluebank.io"
+SUB="devops.bluebank.io"
+USR="Salim Badakhchani"
+MBX="sbadakhc@gmail.com"
 
 read -d '' USAGE <<- EOF
 Usage: kojak [options] deploy
@@ -20,6 +22,9 @@ Usage: kojak [options] deploy
 -c, --byoc            bring your own binary
 EOF
 
+git config credential.helper "cache --timeout=3600" 
+git config user.name "${USR}"
+git config user.email "${MBX}"
 
 if [[ $# < 1 ]]; then echo "${USAGE}"; fi
 while [[ $# > 1 ]]; do OPTS="$1"; shift
@@ -31,8 +36,7 @@ case $OPTS in
     while true; do
         read -p ">> Triggering a release will rebuild your environment from scratch...Do you want to continue? [Y/n]" OPTS
             case $OPTS in
-                [Yy]* ) echo -e "\n>> Pushing changes upstream"
-                        # Delete current project
+                [Yy]* ) echo -e "\n>> Synchronising project..."
                         oc delete project ${APP}
                         sleep 5 
 
@@ -61,9 +65,9 @@ case $OPTS in
                                     [Yy]* ) echo -e "\n>> Pushing changes upstream"  
                                     mvn clean install
                                     git push origin master
-                                    echo -e "\n>> Creating project ${APP}" && oc new-project ${APP}
-                                    echo -e "\n>> Creating app ${APP}" && oc new-app ${REP}.git --name=${APP}
-                                    echo -e "\n>> Creating Service and Route" &&  oc expose service/helloworld --hostname=${APP}.${SUB_DOMAIN} --path=/${APP}
+                                    oc new-project ${APP}
+                                    oc new-app ${REP}.git --name=${APP}
+                                    oc expose service/helloworld --hostname=${APP}.${SUB} --path=/${APP}
                                     exit ;;
                                     [Nn]* ) echo -e "\n>> Release aborted" && exit ;;
                                     * ) echo ">> Invalid Option";;
@@ -82,10 +86,13 @@ case $OPTS in
         read -p ">> Triggering a release will rebuild your environment from scratch...Do you want to continue? [Y/n]" OPTS
             case $OPTS in
                 [Yy]* ) echo -e "\n>> Deploying container to ${APP}"
-                    echo -e "\n>> Deleting project" && oc delete project ${APP} && sleep 5
-                    echo -e "\n>> Creating new project" && oc new-project ${APP} 
-                    echo -e "\n>> Creating app" && oc new-app --insecure-registry ${REG}:latest --name=${APP}
-                    echo -e "\n>> Creating Service and Route" &&  oc expose service/helloworld --hostname=${APP}.${SUB_DOMAIN} --path=/${APP}
+                    docker login gitlab.bluebank.io:4678
+                    docker build -t gitlab.bluebank.io:4678/devcops/${APP} .
+                    docker push gitlab.bluebank.io:4678/devcops/${APP}
+                    oc delete project ${APP} && sleep 5
+                    oc new-project ${APP} 
+                    oc new-app --insecure-registry=true --docker-image="gitlab.bluebank.io:4678/devcops/helloworld":latest --name=${APP}
+                    echo -e "\n>> Creating Service and Route" &&  oc expose service/helloworld --hostname=${APP}.${SUB} --path=/${APP}
                     exit ;;
                 [Nn]* ) echo -e "\n>> Release aborted" && exit ;;
                 * ) echo ">> Invalid Option";;
@@ -105,4 +112,3 @@ case $OPTS in
     ;;
 esac
 done
-
