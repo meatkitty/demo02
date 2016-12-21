@@ -8,7 +8,7 @@
 # Modify environemtn varibles accordingly
 DTE=$(date)
 SCM="https://github.com"
-GRP="devcops"
+GRP="sbadakhc"
 APP="helloworld"
 REP="${SCM}/${GRP}/${APP}"
 REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
