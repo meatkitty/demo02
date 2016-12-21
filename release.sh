@@ -11,7 +11,7 @@ SCM="https://github.com"
 USR="sbadakhc"
 GRP="devops"
 APP="helloworld"
-REP="${SCM}/${GRP}/${APP}"
+REP="${SCM}/${USR}/${APP}"
 REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
 SUB="devops.bluebank.io"
 NAM="Salim Badakhchani"
@@ -68,7 +68,7 @@ case $OPTS in
                                     git push origin master
                                     oc new-project ${APP}
                                     oc new-app ${REP}.git --name=${APP}
-                                    oc expose service/helloworld --hostname=${APP}.${SUB} --path=/${APP}
+                                    oc expose service/${APP} --hostname=${APP}.${SUB} --path=/${APP}
                                     exit ;;
                                     [Nn]* ) echo -e "\n>> Release aborted" && exit ;;
                                     * ) echo ">> Invalid Option";;
