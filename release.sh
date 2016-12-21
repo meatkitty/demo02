@@ -8,12 +8,13 @@
 # Modify environemtn varibles accordingly
 DTE=$(date)
 SCM="https://github.com"
-GRP="sbadakhc"
+USR="sbadakhc"
+GRP="devops"
 APP="helloworld"
 REP="${SCM}/${GRP}/${APP}"
 REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
 SUB="devops.bluebank.io"
-USR="Salim Badakhchani"
+NAM="Salim Badakhchani"
 MBX="sbadakhc@gmail.com"
 
 read -d '' USAGE <<- EOF
@@ -23,7 +24,7 @@ Usage: kojak [options] deploy
 EOF
 
 git config credential.helper "cache --timeout=3600" 
-git config user.name "${USR}"
+git config user.name "${NAM}"
 git config user.email "${MBX}"
 
 if [[ $# < 1 ]]; then echo "${USAGE}"; fi
@@ -87,11 +88,11 @@ case $OPTS in
             case $OPTS in
                 [Yy]* ) echo -e "\n>> Deploying container to ${APP}"
                     docker login gitlab.bluebank.io:4678
-                    docker build -t gitlab.bluebank.io:4678/devcops/${APP} .
-                    docker push gitlab.bluebank.io:4678/devcops/${APP}
-                    #oc delete project ${APP} && sleep 5
-                    #oc new-project ${APP} 
-                    oc new-app --insecure-registry=true --docker-image="gitlab.bluebank.io:4678/devcops/helloworld":latest --name=${APP}
+                    docker build -t gitlab.bluebank.io:4678/${GRP}/${APP} .
+                    docker push gitlab.bluebank.io:4678/${GRP}/${APP}
+                    oc delete project ${APP} && sleep 5
+                    oc new-project ${APP} 
+                    oc new-app --insecure-registry=true --docker-image="gitlab.bluebank.io:4678/${GRP}/${APP}":latest --name=${APP}
                     echo -e "\n>> Creating Service and Route" &&  oc expose service/helloworld --hostname=${APP}.${SUB} --path=/${APP}
                     exit ;;
                 [Nn]* ) echo -e "\n>> Release aborted" && exit ;;
