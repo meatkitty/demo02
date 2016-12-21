@@ -9,7 +9,7 @@
 DTE=$(date)
 SCM="https://github.com"
 USR="sbadakhc"
-GRP="devops"
+GRP="devcops"
 APP="helloworld"
 REP="${SCM}/${USR}/${APP}"
 REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
