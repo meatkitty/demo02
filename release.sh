@@ -9,11 +9,11 @@
 DTE=$(date)
 SCM="https://github.com"
 USR="sbadakhc"
-GRP="devcops"
+GRP="devops"
 APP="helloworld"
 REP="${SCM}/${USR}/${APP}"
 REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
-SUB="devops.bluebank.io"
+SUB="cloudapps.bluebank.io"
 NAM="Salim Badakhchani"
 MBX="sbadakhc@gmail.com"
 
