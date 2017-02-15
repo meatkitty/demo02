@@ -43,4 +43,7 @@ git add -A && git commit -a -m "Version Update ${DTE}"
 git push origin master
 oc new-project ${APP}
 oc new-app ${REP}.git --name=${APP}
+oc patch buildconfig ${APP} -p '{"spec":{"source":{"sourceSecret":{"name":"sshsecret"}}}}'
+oc secrets new-sshauth sshsecret --ssh-privatekey=$HOME/.ssh/${SSH}
+oc secrets link builder sshsecret
 oc expose service/${APP} --hostname=${APP}.${SUB} --path=/${APP}
