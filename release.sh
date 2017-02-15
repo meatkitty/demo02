@@ -43,5 +43,5 @@ git add -A && git commit -a -m "Version Update ${DTE}"
 git push origin master
 oc new-project ${APP}
 oc new-app --name=${APP}
-oc new-app ${SCM}:${USR}/${APP}.git --name=${APP}
+oc new-app ${REP} --name=${APP}
 oc expose service/${APP} --hostname=${APP}.${SUB} --path=/${APP}
