@@ -33,6 +33,6 @@ Instructions
 ------------
 
 1. Clone this repository to a directory to a local direcory on your computer.
-2.  Modify the approrite variables in the release.sh script.
+2. Modify the approrite variables in the release.sh script.
 3. Login into the openshift cluster with the oc client.
 4. Execute the release.sh script.
