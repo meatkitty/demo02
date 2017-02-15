@@ -3,7 +3,7 @@
 # Simple script to increment version in demo
 
 # Uncomment to enable debugging
-#set -x 
+set -x 
 
 # Modify environemtn varibles accordingly
 DTE=$(date)
