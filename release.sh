@@ -9,11 +9,10 @@ set -x
 DTE=$(date)
 SCM="https://github.com"
 USR="sbadakhc"
-GRP="devops"
 APP="helloworld"
 REP="${SCM}/${USR}/${APP}"
 REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
-SUB="cloudapps.bluebank.io"
+SUB="kojapps.bluebank.io"
 NAM="Salim Badakhchani"
 MBX="sbadakhc@gmail.com"
 
@@ -36,6 +35,7 @@ rm update.jsp
 # Run Build
 mvn clean install
 cp -pf target/${APP}.war deploy/
+mvn clean
 
 # Commit the change to our local git repo
 git add -A && git commit -a -m "Version Update ${DTE}"
