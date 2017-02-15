@@ -14,6 +14,7 @@ REP="${SCM}/${USR}/${APP}"
 SUB="kojapps.bluebank.io"
 NAM="Salim Badakhchani"
 MBX="sbadakhc@gmail.com"
+SSH="id_rsa-bluebank" 
 
 
 git config credential.helper "cache --timeout=3600" 
