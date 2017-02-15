@@ -11,10 +11,10 @@ SCM="https://github.com"
 USR="sbadakhc"
 APP="helloworld"
 REP="${SCM}/${USR}/${APP}"
-REG="gitlab.bluebank.io:4678/${GRP}/${APP}"
 SUB="kojapps.bluebank.io"
 NAM="Salim Badakhchani"
 MBX="sbadakhc@gmail.com"
+
 
 git config credential.helper "cache --timeout=3600" 
 git config user.name "${NAM}"
@@ -43,4 +43,5 @@ git add -A && git commit -a -m "Version Update ${DTE}"
 git push origin master
 oc new-project ${APP}
 oc new-app --name=${APP}
+oc new-app ${SCM}:${USR}/${APP}.git --name=${APP}
 oc expose service/${APP} --hostname=${APP}.${SUB} --path=/${APP}
