@@ -97,7 +97,7 @@ deploy() {
     done 
     
     oc new-project ${PRO} > /dev/null 2>&1 
-    oc new-app ${SCM}:${USR}/${APP}.git --name=${PRO}
+    oc new-app ${SCM}/${USR}/${APP}.git --name=${PRO}
     oc patch buildconfig ${PRO} -p '{"spec":{"source":{"sourceSecret":{"name":"sshsecret"}}}}'
     oc secrets new-sshauth sshsecret --ssh-privatekey=$HOME/.ssh/${SSH}
     oc secrets link builder sshsecret
