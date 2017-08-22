@@ -1,41 +1,11 @@
-#!/bin/sh
-#
-# Copyright (C) 2017 Bluebank.
-# Author: Salim Badakhchani <salim.badakhchani@bluebank.io>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-########################################################################
+#!/bin/bash
+#set -ex 
 
-
-# Uncomment to enable debugging
-#set -x 
-
-# Declare variables
-NAM="$(git config user.name)"			# SCM username
-GIT="$(git config user.email)"  		# SCM email
-USR="$(echo ${GIT/\@*})"				# Parse the name from the username
-RID="$2"								# Take user input for repository identifier
-DTE=$(date)								# Use the current date for a time stamp
-SUB="bluebank.io"				        # Declare the subdomain for the PAAS
-SCM="https://github.com" 			    # The SCM URL used to clone from 
-APP="helloworld"						# Applicaiton name
-PRO="${RID}-helloworld"					# Openshift environment
-REP="${SCM}/${USR}/${APP}"				# SCM repository
-OSD="kojapps.bluebank.io"               # Openshift cloudapps subdomain
-SSH="id_rsa-bluebank"					# Public ssh key
-
+REG="docker-registry-default.bluebank.io:443"
+REP="sb-helloworld-dev"
+IMG="helloworld"
+TAG="latest"
+DTE=$(date)
 
 # Usage options and user arguments
 read -d '' USAGE <<- EOF
@@ -45,7 +15,7 @@ Usage: ./release.sh [options] <env>
 -r, --release         build & deploy binary
 -h, --help            prints this message
 
-Example: ./release.sh -r <uid>
+Example: ./release.sh -r <uid-env>
 EOF
 
 # Cache scm credentials for convenience
@@ -79,29 +49,35 @@ build() {
 
 deploy() {
     echo -e ">> Deploying binary to PAAS...\n"
-    # Check for ssh agent
-    [[ ! -z $(pgrep ssh-agent) ]] || eval "$(ssh-agent -s)" ; ssh-add $HOME/.ssh/${SSH}
-    
+
     # Check if project exists
     PROJECTS="$(oc get projects)"
 
     for project in $PROJECTS; do
-        if [ "$project" == "$PRO" ]; then
-            oc delete project ${PRO} > /dev/null 2>&1
-            until oc new-project ${PRO} > /dev/null 2>&1; do
-                echo -e "Trying to reprovison project...Please be patient!"
-                sleep 10
+        if [ "$project" == "$REP" ]; then
+            oc delete project ${REP} > /dev/null 2>&1
+            until oc new-project ${REP} > /dev/null 2>&1; do
+            echo -e "Trying to reprovison project...Please be patient!"
+            sleep 10
             done
+        fi
+    done
 
-		fi
-    done 
-    
-    oc new-project ${PRO} > /dev/null 2>&1 
-    oc new-app ${SCM}/${USR}/${APP}.git --name=${PRO}
-    oc patch buildconfig ${PRO} -p '{"spec":{"source":{"sourceSecret":{"name":"sshsecret"}}}}'
-    oc secrets new-sshauth sshsecret --ssh-privatekey=$HOME/.ssh/${SSH}
-    oc secrets link builder sshsecret
-    oc expose service/${PRO} --hostname=${PRO}.${OSD} --path=/${APP}
+    echo -e "\n# Create project"
+    oc new-project ${REP}
+
+    echo -e "\n# Login to registry..."
+    docker login --username=$(oc whoami) --password=$(oc whoami -t) ${REG}
+
+    echo -e "\n# build an tag image..."
+    docker build -t ${REG}/${REP}/${IMG}:${TAG} .
+
+    echo -e "\n# Push image..."
+    docker push ${REG}/${REP}/${IMG}:${TAG}
+
+    echo -e "\n# Deploy application..."
+    oc new-app helloworld
+    oc create route edge --hostname=helloworld.bluebank.io --service=helloworld --port=8080 --insecure-policy=Redirect
     break
 }
 
@@ -138,4 +114,3 @@ case $OPTS in
     ;;
 esac
 done
-
