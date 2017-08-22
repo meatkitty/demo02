@@ -29,7 +29,7 @@ fi
 
 # Define core functions
 build() {
-    echo -e "\n Building binary..."
+    echo -e "\n# Building binary..."
     
     echo -e "\n# Sync with upstream..."
     git pull 
@@ -48,7 +48,7 @@ build() {
 }
 
 deploy() {
-    echo -e "\n#Deploying binary to PAAS..."
+    echo -e "\n# Deploying binary to OCP..."
 
     # Check if project exists
     PROJECTS="$(oc get projects)"
@@ -61,9 +61,6 @@ deploy() {
             done
         fi
     done
-
-    echo -e "\n# Create project"
-    oc new-project ${REP}
 
     echo -e "\n# Login to registry..."
     docker login --username=$(oc whoami) --password=$(oc whoami -t) ${REG}
@@ -85,17 +82,14 @@ while [[ $# > 0 ]]; do OPTS="$1"; shift
 
 case $OPTS in
     -b|--build)
-    echo -e "Executing build..."
     build
     shift
     ;;
     -d|--deploy)
-    echo -e "Deploying build..."
     deploy
     shift
     ;;
     -r|--release)
-    echo -e "Releasing build..."
     build
     deploy
     shift
