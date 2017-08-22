@@ -48,7 +48,7 @@ build() {
 }
 
 deploy() {
-    echo -e "\n Deploying binary to PAAS..."
+    echo -e "\n#Deploying binary to PAAS..."
 
     # Check if project exists
     PROJECTS="$(oc get projects)"
@@ -77,7 +77,6 @@ deploy() {
     echo -e "\n# Deploy application..."
     oc new-app helloworld
     oc create route edge --hostname=helloworld.bluebank.io --service=helloworld --port=8080 --insecure-policy=Redirect
-    break
 }
 
 
