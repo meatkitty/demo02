@@ -113,3 +113,4 @@ case $OPTS in
     echo "${USAGE} option" # unknown option
     ;;
 esac
+done
