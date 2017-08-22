@@ -2,20 +2,23 @@
 #set -ex 
 
 REG="docker-registry-default.bluebank.io:443"
-REP="sb-helloworld-dev"
+USR="$2"
+PRO="$3"
+ENV="$4"
+REP="${USR}-${PRO}-${ENV}"
 IMG="helloworld"
 TAG="latest"
 DTE=$(date)
 
 # Usage options and user arguments
 read -d '' USAGE <<- EOF
-Usage: ./release.sh [options] <env>
+Usage: ./release.sh [options] <usr> <pro> <env>
 -b, --build           build binary
 -d, --deploy          deploy binary
 -r, --release         build & deploy binary
 -h, --help            prints this message
 
-Example: ./release.sh -r <project-name>
+Example: ./release.sh -r my-user my-project my-env
 EOF
 
 # Cache scm credentials for convenience
@@ -79,7 +82,7 @@ deploy() {
 }
 
 
-if [[ $# < 1 ]]; then echo "${USAGE}"; fi
+if [[ $# < 4 ]]; then echo "${USAGE}"; fi
 while [[ $# > 0 ]]; do OPTS="$1"; shift
 
 case $OPTS in
