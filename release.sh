@@ -15,7 +15,7 @@ Usage: ./release.sh [options] <env>
 -r, --release         build & deploy binary
 -h, --help            prints this message
 
-Example: ./release.sh -r <uid-env>
+Example: ./release.sh -r <project-name>
 EOF
 
 # Cache scm credentials for convenience
