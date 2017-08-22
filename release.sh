@@ -29,30 +29,29 @@ fi
 
 # Define core functions
 build() {
-    echo -e ">> Building binary...\n"
+    echo -e "\n Building binary..."
     
-    # Sync with upstream
-	git pull 
-
-    # Update the version of the file
-	echo "<h3>Hello World!!! - Bluebank PAAS - DevOps Circuit - Version Update >> ${DTE}</h3>" > ./src/main/webapp/index.jsp
-
-    # Run Build
-	mvn clean install
-	cp -pf target/${IMG}.war deploy/
-        mvn clean
-
-    # Commit the change to our local git repo
-	git add -A && git commit -a -m "Version Update ${DTE}"
-	git push origin master
+    echo -e "\n# Sync with upstream..."
+    git pull 
+    
+    echo -e "\n# Update the version of the file..."
+    echo "<h3>Hello World!!! - Bluebank PAAS - DevOps Circuit - Version Update >> ${DTE}</h3>" > ./src/main/webapp/index.jsp
+    
+    echo -e "\n# Run Build"
+    mvn clean install
+    cp -pf target/${IMG}.war deploy/
+    mvn clean
+    
+    echo -e "\n# Commit the change to our local git repo..."
+    git add -A && git commit -a -m "Version Update ${DTE}"
+    git push origin master
 }
 
 deploy() {
-    echo -e ">> Deploying binary to PAAS...\n"
+    echo -e "\n Deploying binary to PAAS..."
 
     # Check if project exists
     PROJECTS="$(oc get projects)"
-
     for project in $PROJECTS; do
         if [ "$project" == "$REP" ]; then
             oc delete project ${REP} > /dev/null 2>&1
