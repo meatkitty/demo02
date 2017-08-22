@@ -82,8 +82,8 @@ deploy() {
 }
 
 
-if [[ $# > 1 ]]; then echo "${USAGE}"; fi
-while [[ ! $# > 4 ]]; do OPTS="$1"; shift
+if [[ $# < 4 ]]; then echo "${USAGE}"; fi
+while [[ $# > 3 ]]; do OPTS="$1"; shift
 
 case $OPTS in
     -b|--build)
