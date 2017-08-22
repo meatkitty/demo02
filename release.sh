@@ -73,6 +73,7 @@ deploy() {
 
     echo -e "\n# Deploy application..."
     oc new-app helloworld
+    oc delete service helloworld
     oc create service nodeport helloworld --tcp=443:8080
     oc create route edge --hostname=helloworld.bluebank.io --service=helloworld --path=/helloworld --port=8080 --insecure-policy=Redirect
 }
