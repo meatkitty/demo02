@@ -82,7 +82,7 @@ deploy() {
 }
 
 
-if [[ $# > 4 ]]; then echo "${USAGE}"; fi
+if [[ $# > 3 ]]; then echo "${USAGE}"; fi
 while [[ $# > 1 ]]; do OPTS="$1"; shift
 
 case $OPTS in
