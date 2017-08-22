@@ -39,8 +39,8 @@ build() {
 
     # Run Build
 	mvn clean install
-	cp -pf target/${APP}.war deploy/
-    mvn clean
+	cp -pf target/${IMG}.war deploy/
+        mvn clean
 
     # Commit the change to our local git repo
 	git add -A && git commit -a -m "Version Update ${DTE}"
