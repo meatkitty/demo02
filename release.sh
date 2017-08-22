@@ -32,7 +32,7 @@ fi
 
 # Define core functions
 build() {
-    echo -e "\n# Building binary..."
+    echo -e "\n# Building binary for ${REP}..."
     
     echo -e "\n# Sync with upstream..."
     git pull 
@@ -51,7 +51,7 @@ build() {
 }
 
 deploy() {
-    echo -e "\n# Deploying binary to OCP..."
+    echo -e "\n# Deploying binary to OCP for ${REP}..."
 
     # Check if project exists
     PROJECTS="$(oc get projects)"
